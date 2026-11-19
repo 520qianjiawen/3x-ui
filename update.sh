@@ -535,6 +535,9 @@ update_x-ui() {
     if [[ -n "${XUI_UPDATE_TAG}" ]]; then
         tag_version="${XUI_UPDATE_TAG}"
         echo -e "${green}Using update tag: ${tag_version}${plain}"
+    elif [[ -n "$1" ]]; then
+        tag_version="$1"
+        echo -e "${green}Using update tag: ${tag_version}${plain}"
     else
         tag_version=$(${curl_bin} -Ls "https://api.github.com/repos/${xui_repo}/releases/latest" 2> /dev/null | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
         if [[ ! -n "$tag_version" ]]; then
