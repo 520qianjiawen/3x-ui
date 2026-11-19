@@ -38,8 +38,8 @@ type SettingService interface {
 
 // InitLocalizer initializes the internationalization system with embedded translation files.
 func InitLocalizer(i18nFS fs.FS, settingService SettingService) error {
-	// set default bundle to English
-	bundle := i18n.NewBundle(language.MustParse("en-US"))
+	// set default bundle to Simplified Chinese
+	bundle := i18n.NewBundle(language.MustParse("zh-CN"))
 	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 
 	// parse files
@@ -153,7 +153,7 @@ func LocalizerMiddleware() gin.HandlerFunc {
 		// Ensure bundle is initialized so creating a Localizer won't panic
 		bundle := i18nBundle.Load()
 		if bundle == nil {
-			bundle = i18n.NewBundle(language.MustParse("en-US"))
+			bundle = i18n.NewBundle(language.MustParse("zh-CN"))
 			bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
 			// Try lazy-load from disk when running sub server without InitLocalizer
 			if err := loadTranslationsFromDisk(bundle); err != nil {
@@ -168,7 +168,7 @@ func LocalizerMiddleware() gin.HandlerFunc {
 		if cookie, err := c.Request.Cookie("lang"); err == nil {
 			lang = cookie.Value
 		} else {
-			lang = c.GetHeader("Accept-Language")
+			lang = "zh-CN"
 		}
 
 		localizer := i18n.NewLocalizer(bundle, lang)

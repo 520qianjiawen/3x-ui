@@ -7,9 +7,7 @@ import type { SponsorList } from '@/generated/types';
 const EMPTY: SponsorList = { sponsors: [] };
 
 async function fetchSponsors(): Promise<SponsorList> {
-  const msg = await HttpUtil.get<SponsorList>('/sponsors', undefined, { silent: true });
-  if (!msg?.success || !msg.obj) return EMPTY;
-  return { contact: msg.obj.contact, sponsors: msg.obj.sponsors ?? [] };
+  return EMPTY;
 }
 
 export function useSponsorsQuery() {

@@ -888,11 +888,11 @@ const languageCookieNames: Record<LanguageScope, string> = {
 
 export class LanguageManager {
   static readonly supportedLanguages: readonly SupportedLanguage[] = [
-    { name: 'العربية', value: 'ar-EG', icon: '🇪🇬' },
-    { name: 'English', value: 'en-US', icon: '🇺🇸' },
-    { name: 'فارسی', value: 'fa-IR', icon: '🇮🇷' },
     { name: '简体中文', value: 'zh-CN', icon: '🇨🇳' },
     { name: '繁體中文', value: 'zh-TW', icon: '🇹🇼' },
+    { name: 'English', value: 'en-US', icon: '🇺🇸' },
+    { name: 'العربية', value: 'ar-EG', icon: '🇪🇬' },
+    { name: 'فارسی', value: 'fa-IR', icon: '🇮🇷' },
     { name: '日本語', value: 'ja-JP', icon: '🇯🇵' },
     { name: 'Русский', value: 'ru-RU', icon: '🇷🇺' },
     { name: 'Tiếng Việt', value: 'vi-VN', icon: '🇻🇳' },
@@ -917,39 +917,42 @@ export class LanguageManager {
       }
     }
 
-    if (window.navigator) {
+    if (typeof window !== 'undefined' && window.navigator) {
       const nav = window.navigator as Navigator & { userLanguage?: string };
-      lang = nav.language || nav.userLanguage || '';
+      const raw = nav.language || nav.userLanguage || '';
 
       const simularLangs: [string, string][] = [
-        ['ar', LanguageManager.supportedLanguages[0].value],
-        ['fa', LanguageManager.supportedLanguages[2].value],
-        ['ja', LanguageManager.supportedLanguages[5].value],
-        ['ru', LanguageManager.supportedLanguages[6].value],
-        ['vi', LanguageManager.supportedLanguages[7].value],
-        ['es', LanguageManager.supportedLanguages[8].value],
-        ['id', LanguageManager.supportedLanguages[9].value],
-        ['uk', LanguageManager.supportedLanguages[10].value],
-        ['tr', LanguageManager.supportedLanguages[11].value],
-        ['pt', LanguageManager.supportedLanguages[12].value],
-        ['sk', LanguageManager.supportedLanguages[13].value],
+        ['zh', 'zh-CN'],
+        ['zh-CN', 'zh-CN'],
+        ['zh-TW', 'zh-TW'],
+        ['zh-HK', 'zh-TW'],
+        ['ar', 'ar-EG'],
+        ['fa', 'fa-IR'],
+        ['ja', 'ja-JP'],
+        ['ru', 'ru-RU'],
+        ['vi', 'vi-VN'],
+        ['es', 'es-ES'],
+        ['id', 'id-ID'],
+        ['uk', 'uk-UA'],
+        ['tr', 'tr-TR'],
+        ['pt', 'pt-BR'],
+        ['sk', 'sk-SK'],
       ];
 
-      simularLangs.forEach((pair) => {
-        if (lang === pair[0]) {
+      for (const pair of simularLangs) {
+        if (raw === pair[0] || raw.startsWith(pair[0] + '-') || raw.startsWith(pair[0] + '_')) {
           lang = pair[1];
+          break;
         }
-      });
-
-      if (LanguageManager.isSupportLanguage(lang)) {
-        CookieManager.setCookie(cookieName, lang, 365);
-      } else {
-        CookieManager.setCookie(cookieName, 'en-US', 365);
-        window.location.reload();
       }
+
+      if (!lang || !LanguageManager.isSupportLanguage(lang)) {
+        lang = 'zh-CN';
+      }
+      CookieManager.setCookie(cookieName, lang, 365);
     } else {
-      CookieManager.setCookie(cookieName, 'en-US', 365);
-      window.location.reload();
+      lang = 'zh-CN';
+      CookieManager.setCookie(cookieName, lang, 365);
     }
 
     return lang;
@@ -957,7 +960,7 @@ export class LanguageManager {
 
   static setLanguage(language: string, scope: LanguageScope = 'panel'): void {
     if (!LanguageManager.isSupportLanguage(language)) {
-      language = 'en-US';
+      language = 'zh-CN';
     }
     CookieManager.setCookie(languageCookieNames[scope], language, 365);
     window.location.reload();

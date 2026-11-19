@@ -97,7 +97,7 @@ var defaultValueMap = map[string]string{
 	"tgBotBackup":                 "false",
 	"tgCpu":                       "80",
 	"tgMemory":                    "80",
-	"tgLang":                      "en-US",
+	"tgLang":                      "zh-CN",
 	"twoFactorEnable":             "false",
 	"twoFactorToken":              "",
 	"happLinkEnable":              "false",
@@ -261,7 +261,7 @@ var defaultValueMap = map[string]string{
 	"discordBotBackup":     "false",
 	"discordCpu":           "80",
 	"discordMemory":        "80",
-	"discordLang":          "en-US",
+	"discordLang":          "zh-CN",
 	"discordEnabledEvents": "login.attempt,cpu.high",
 }
 
